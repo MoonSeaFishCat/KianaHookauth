@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
 
       if (!existingDevice) {
         // 添加永久授权
-        const signature = generateDeviceSignature(deviceCode, settings?.secret_key)
+        const signature = await generateDeviceSignatureAsync(deviceCode, settings?.secret_key)
         await db.createDevice({
           device_code: deviceCode,
           device_name: null,
