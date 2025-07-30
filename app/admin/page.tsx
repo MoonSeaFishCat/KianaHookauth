@@ -25,10 +25,38 @@ export default function AdminPage() {
   const [devices, setDevices] = useState<DeviceAuthorization[]>([])
   const [settings, setSettings] = useState<SystemSettings | null>(null)
 
+  // 检查认证状态
+  useEffect(() => {
+    checkAuthStatus()
+  }, [])
+
   // 加载数据
   useEffect(() => {
     loadInitialData()
   }, [])
+
+  const checkAuthStatus = async () => {
+    try {
+      const response = await fetch("/api/admin/auth/check", {
+        credentials: 'include'
+      })
+
+      if (!response.ok) {
+        // 认证失败，跳转到登录页
+        router.replace("/admin/login")
+        return
+      }
+
+      const data = await response.json()
+      if (!data.success) {
+        router.replace("/admin/login")
+        return
+      }
+    } catch (error) {
+      console.error("认证检查失败:", error)
+      router.replace("/admin/login")
+    }
+  }
 
   const loadInitialData = async () => {
     setLoading(true)

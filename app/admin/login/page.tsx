@@ -87,8 +87,10 @@ export default function AdminLoginPage() {
 
       if (data.success) {
         setMessage({ type: 'success', text: "登录成功，正在跳转..." })
-        // 立即跳转，不等待
-        router.replace("/admin")
+        // 等待一小段时间确保cookie设置完成，然后跳转
+        setTimeout(() => {
+          window.location.href = "/admin"
+        }, 500)
       } else {
         setMessage({ type: 'error', text: data.message || "登录失败" })
       }
